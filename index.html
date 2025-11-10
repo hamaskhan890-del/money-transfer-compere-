@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Compere international money transfer providers</title>
+
+  <meta name="description" content="Find the best way to send money across the world">
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#eef9f0; --card:#ffffff; --muted:#6b7280; --green:#16a34a; --orange:#f59e0b; --red:#ef4444; --accent:#0b6b3f;
+      --shadow:0 10px 26px rgba(6,40,27,0.06);
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#f7fff7);-webkit-font-smoothing:antialiased}
+    body{display:flex;justify-content:center;padding:20px;color:#06221a}
+    .site{width:100%;max-width:1260px;display:flex;flex-direction:column;gap:18px;min-height:0}
+
+    /* Converter card */
+    .converter{
+      background:linear-gradient(180deg,var(--accent),#0d7f4b);
+      color:#fff;border-radius:12px;padding:14px;box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,0.04);position:relative;overflow:visible;
+    }
+
+    .conv-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+    .conv-title{font-weight:800;font-size:16px}
+
+    .conv-inner{
+      display:grid;
+      grid-template-columns: 260px 1fr 140px;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        "controls summary actions"
+        "controls amount   actions";
+      gap:12px;
+      align-items:end;
+    }
+
+    .controls{grid-area:controls;display:flex;flex-direction:column;gap:10px}
+    .summary-wrap{grid-area:summary;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+    .actions{grid-area:actions;display:flex;align-items:end;justify-content:flex-end}
+
+    .controls .field{display:flex;flex-direction:column;gap:6px}
+    .field label{font-size:13px;color:rgba(255,255,255,0.95)}
+    select{height:44px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.06);color:#fff;font-size:14px;appearance:none}
+
+    .amount-field{grid-area:amount;display:flex;flex-direction:column;gap:6px}
+    .amount-box{background:rgba(255,255,255,0.05);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04)}
+    .amount-box input{background:transparent;border:0;color:#fff;font-weight:800;font-size:16px;width:100%;outline:none}
+
+    .compare-btn{background:#fff;color:var(--accent);padding:10px 14px;border-radius:10px;border:0;font-weight:800;cursor:pointer;font-size:14px;height:44px}
+
+    .summary{
+      background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+      padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:6px;
+      min-width:0;
+    }
+    .kpi-row{display:flex;gap:12px;align-items:center;justify-content:space-between;width:100%}
+    .kpi-left{font-weight:800;font-size:16px}
+    .kpi-right{font-weight:700;color:#e6ffe8;font-size:15px}
+    .rate-line{font-size:12px;color:rgba(255,255,255,0.9)}
+
+    /* Comparison area */
+    .comparison-wrap{display:flex;flex-direction:column;gap:12px}
+    .cards-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    @media (min-width:700px){ .cards-grid{grid-template-columns:repeat(2,1fr)} }
+    @media (min-width:1000px){ .cards-grid{grid-template-columns:repeat(3,1fr)} }
+    @media (min-width:1400px){ .cards-grid{grid-template-columns:repeat(4,1fr)} }
+
+    .provider-card{
+      background:var(--card);border-radius:10px;padding:12px;border:1px solid rgba(11,102,255,0.04);
+      box-shadow:0 6px 16px rgba(6,120,72,0.04);display:grid;grid-template-rows:auto auto;gap:10px;min-height:120px;overflow:visible;
+    }
+
+    .card-row-1{display:flex;align-items:center;gap:10px;justify-content:space-between}
+    .provider-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1;overflow:hidden}
+    .logo{width:48px;height:48px;border-radius:8px;overflow:hidden;display:grid;place-items:center;background:#f3f6f4;flex:0 0 48px}
+    .logo img{width:36px;height:36px;object-fit:contain;display:block}
+    .name-and-visit{display:flex;align-items:center;gap:8px;min-width:0}
+    .prov-name{font-weight:800;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .visit-inline{background:transparent;color:var(--accent);border:1px solid rgba(11,102,255,0.12);padding:6px 8px;border-radius:8px;font-weight:700;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+
+    .rating-cell{display:flex;align-items:center;gap:8px;flex-shrink:0;font-weight:700}
+
+    .card-row-2{display:grid;grid-template-columns:1fr 1fr 120px;gap:10px;align-items:center}
+    .value-box{background:#fbfdff;border-radius:8px;padding:8px;text-align:left;border:1px solid rgba(11,102,255,0.04);min-width:0}
+    .value-box .label{font-size:11px;color:var(--muted);margin-bottom:6px}
+    .value-box .value{font-weight:800;font-size:13px}
+    .value-recipient .value{color:var(--green)}
+
+    /* star color classes */
+    .stars .star { font-size:14px; line-height:1; margin-right:2px; }
+    .stars.green .star { color: var(--green); }
+    .stars.orange .star { color: var(--orange); }
+    .stars.red .star { color: var(--red); }
+    .stars.faded .star { color: #e6e6e6; }
+
+    /* Responsive stacking */
+    @media (max-width:900px){
+      .conv-inner{
+        grid-template-columns:1fr;
+        grid-template-rows:auto auto auto auto;
+        grid-template-areas:
+          "controls"
+          "amount"
+          "summary"
+          "actions";
+      }
+      .controls{flex-direction:column}
+      .summary{align-items:stretch}
+      .actions{justify-content:flex-start}
+      .card-row-2{grid-template-columns:1fr 1fr 1fr}
+    }
+
+    @media (max-width:480px){
+      .logo{width:40px;height:40px}
+      .logo img{width:28px;height:28px}
+      .prov-name{font-size:13px}
+      .compare-btn{width:100%}
+    }
+
+    /* Prevent overlap due to transforms/absolute parents */
+    .site, .converter, .comparison-wrap, .cards-grid, .provider-card { transform:none !important; }
+    .converter * { position:static !important; }
+    .values-row { min-width:0 !important; }
+  </style>
+</head>
+<body>
+  <div class="site">
+    <section class="converter" aria-label="Currency converter">
+      <div class="conv-head">
+        <div class="conv-title">Currency Converter</div>
+      </div>
+
+      <div class="conv-inner">
+        <div class="controls" aria-hidden="false">
+          <div class="field">
+            <label for="from">From</label>
+            <select id="from" aria-label="From currency"></select>
+          </div>
+
+          <div class="field">
+            <label for="to">To</label>
+            <select id="to" aria-label="To currency"></select>
+          </div>
+        </div>
+
+        <div class="summary-wrap">
+          <div class="summary" aria-live="polite">
+            <div class="kpi-row">
+              <div class="kpi-left" id="left-amount">£1,000.00</div>
+              <div class="kpi-right" id="right-amount">€1,154.20</div>
+            </div>
+            <div class="rate-line" id="rate-line">1 GBP = 1.1542 EUR</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="compareBtn" class="compare-btn" aria-label="Compare Providers">Compare</button>
+        </div>
+
+        <div class="amount-field">
+          <label for="amount">Enter Amount</label>
+          <div class="amount-box">
+            <input id="amount" value="1000.00" inputmode="decimal" aria-label="Enter Amount" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="comparison-wrap">
+      <div style="font-size:18px;font-weight:800;color:#083926;margin-bottom:8px">Compare money transfer providers</div>
+      <div class="cards-grid" id="cardsGrid" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script>
+    // Large currency list
+    const currencies = [
+      { code:'AED', sym:'د.إ', name:'United Arab Emirates Dirham' },
+      { code:'AFN', sym:'؋', name:'Afghan Afghani' },
+      { code:'ALL', sym:'L', name:'Albanian Lek' },
+      { code:'AMD', sym:'֏', name:'Armenian Dram' },
+      { code:'ANG', sym:'ƒ', name:'Netherlands Antillean Guilder' },
+      { code:'AOA', sym:'Kz', name:'Angolan Kwanza' },
+      { code:'ARS', sym:'$', name:'Argentine Peso' },
+      { code:'AUD', sym:'$', name:'Australian Dollar' },
+      { code:'AZN', sym:'₼', name:'Azerbaijani Manat' },
+      { code:'BAM', sym:'KM', name:'Bosnia Herzegovina Convertible Mark' },
+      { code:'BDT', sym:'৳', name:'Bangladeshi Taka' },
+      { code:'BGN', sym:'лв', name:'Bulgarian Lev' },
+      { code:'BHD', sym:'د.ب', name:'Bahraini Dinar' },
+      { code:'BIF', sym:'FBu', name:'Burundian Franc' },
+      { code:'BND', sym:'$', name:'Brunei Dollar' },
+      { code:'BOB', sym:'Bs', name:'Bolivian Boliviano' },
+      { code:'BRL', sym:'R$', name:'Brazilian Real' },
+      { code:'BSD', sym:'$', name:'Bahamian Dollar' },
+      { code:'BTN', sym:'Nu', name:'Bhutanese Ngultrum' },
+      { code:'BWP', sym:'P', name:'Botswana Pula' },
+      { code:'BYN', sym:'Br', name:'Belarusian Ruble' },
+      { code:'BZD', sym:'$', name:'Belize Dollar' },
+      { code:'CAD', sym:'$', name:'Canadian Dollar' },
+      { code:'CDF', sym:'FC', name:'Congolese Franc' },
+      { code:'CHF', sym:'CHF', name:'Swiss Franc' },
+      { code:'CLP', sym:'$', name:'Chilean Peso' },
+      { code:'CNY', sym:'¥', name:'Chinese Yuan' },
+      { code:'COP', sym:'$', name:'Colombian Peso' },
+      { code:'CRC', sym:'₡', name:'Costa Rican Colón' },
+      { code:'CZK', sym:'Kč', name:'Czech Koruna' },
+      { code:'DKK', sym:'kr', name:'Danish Krone' },
+      { code:'DZD', sym:'دج', name:'Algerian Dinar' },
+      { code:'EGP', sym:'£', name:'Egyptian Pound' },
+      { code:'EUR', sym:'€', name:'Euro' },
+      { code:'FJD', sym:'$', name:'Fijian Dollar' },
+      { code:'GBP', sym:'£', name:'British Pound' },
+      { code:'GEL', sym:'₾', name:'Georgian Lari' },
+      { code:'GHS', sym:'¢', name:'Ghanaian Cedi' },
+      { code:'HKD', sym:'$', name:'Hong Kong Dollar' },
+      { code:'HUF', sym:'Ft', name:'Hungarian Forint' },
+      { code:'IDR', sym:'Rp', name:'Indonesian Rupiah' },
+      { code:'ILS', sym:'₪', name:'Israeli New Sheqel' },
+      { code:'INR', sym:'₹', name:'Indian Rupee' },
+      { code:'IQD', sym:'ع.د', name:'Iraqi Dinar' },
+      { code:'IRR', sym:'﷼', name:'Iranian Rial' },
+      { code:'ISK', sym:'kr', name:'Icelandic Króna' },
+      { code:'JMD', sym:'$', name:'Jamaican Dollar' },
+      { code:'JOD', sym:'د.ا', name:'Jordanian Dinar' },
+      { code:'JPY', sym:'¥', name:'Japanese Yen' },
+      { code:'KES', sym:'KSh', name:'Kenyan Shilling' },
+      { code:'KRW', sym:'₩', name:'South Korean Won' },
+      { code:'KWD', sym:'د.ك', name:'Kuwaiti Dinar' },
+      { code:'KZT', sym:'₸', name:'Kazakhstani Tenge' },
+      { code:'LAK', sym:'₭', name:'Lao Kip' },
+      { code:'LBP', sym:'ل.ل', name:'Lebanese Pound' },
+      { code:'LKR', sym:'₨', name:'Sri Lankan Rupee' },
+      { code:'MAD', sym:'د.م', name:'Moroccan Dirham' },
+      { code:'MDL', sym:'L', name:'Moldovan Leu' },
+      { code:'MGA', sym:'Ar', name:'Malagasy Ariary' },
+      { code:'MKD', sym:'ден', name:'Macedonian Denar' },
+      { code:'MMK', sym:'Ks', name:'Myanmar Kyat' },
+      { code:'MNT', sym:'₮', name:'Mongolian Tugrik' },
+      { code:'MOP', sym:'MOP$', name:'Macanese Pataca' },
+      { code:'MUR', sym:'₨', name:'Mauritian Rupee' },
+      { code:'MXN', sym:'$', name:'Mexican Peso' },
+      { code:'MYR', sym:'RM', name:'Malaysian Ringgit' },
+      { code:'NGN', sym:'₦', name:'Nigerian Naira' },
+      { code:'NOK', sym:'kr', name:'Norwegian Krone' },
+      { code:'NPR', sym:'₨', name:'Nepalese Rupee' },
+      { code:'NZD', sym:'$', name:'New Zealand Dollar' },
+      { code:'OMR', sym:'ر.ع.', name:'Omani Rial' },
+      { code:'PEN', sym:'S/', name:'Peruvian Nuevo Sol' },
+      { code:'PHP', sym:'₱', name:'Philippine Peso' },
+      { code:'PKR', sym:'₨', name:'Pakistani Rupee' },
+      { code:'PLN', sym:'zł', name:'Polish Zloty' },
+      { code:'QAR', sym:'﷼', name:'Qatari Riyal' },
+      { code:'RON', sym:'lei', name:'Romanian Leu' },
+      { code:'RUB', sym:'₽', name:'Russian Ruble' },
+      { code:'SAR', sym:'﷼', name:'Saudi Riyal' },
+      { code:'SEK', sym:'kr', name:'Swedish Krona' },
+      { code:'SGD', sym:'$', name:'Singapore Dollar' },
+      { code:'THB', sym:'฿', name:'Thai Baht' },
+      { code:'TRY', sym:'₺', name:'Turkish Lira' },
+      { code:'TWD', sym:'NT$', name:'New Taiwan Dollar' },
+      { code:'UAH', sym:'₴', name:'Ukrainian Hryvnia' },
+      { code:'USD', sym:'$', name:'US Dollar' },
+      { code:'VND', sym:'₫', name:'Vietnamese Dong' },
+      { code:'XAF', sym:'FCFA', name:'Central African CFA franc' },
+      { code:'XOF', sym:'CFA', name:'West African CFA franc' },
+      { code:'ZAR', sym:'R', name:'South African Rand' }
+    ];
+
+    // Providers (logos expected at ./logos/logos-<id>.svg)
+    const providers = [
+      { id:'wise', name:'Wise', defaultRate:1.1542, fee:'£0.35', rating:4.9, url:'https://wise.prf.hn/click/camref:1011l7uZ7' },
+      { id:'instarem', name:'Instarem', defaultRate:1.1521, fee:'£0.50', rating:4.6, url:'https://www.instarem.com' },
+      { id:'worldremit', name:'WorldRemit', defaultRate:1.1512, fee:'£0.99', rating:4.7, url:'https://www.worldremit.com' },
+      { id:'transfergo', name:'TransferGo', defaultRate:1.1490, fee:'£0.99', rating:4.3, url:'https://www.transfergo.com' },
+      { id:'moneygram', name:'MoneyGram', defaultRate:1.1485, fee:'£2.00', rating:4.2, url:'https://www.moneygram.com' },
+      { id:'westernunion', name:'WesternUnion', defaultRate:1.1456, fee:'£0.00', rating:4.1, url:'https://www.westernunion.com' },
+      { id:'payoneer', name:'Payoneer', defaultRate:1.1468, fee:'£1.00', rating:4.1, url:'https://www.payoneer.com' },
+      { id:'paypal', name:'PayPal', defaultRate:1.1393, fee:'£3.49', rating:3.8, url:'https://www.paypal.com' },
+      { id:'remitly', name:'Remitly', defaultRate:1.1372, fee:'£2.49', rating:3.6, url:'https://www.remitly.com' }
+    ];
+
+    // simple market table (GBP baseline)
+    const marketGBP = { GBP:1, EUR:1.1542, USD:1.27, AUD:1.85, CAD:1.68, INR:106.5, JPY:185, CNY:9.05, NGN:1750, ZAR:27, MXN:23.8 };
+
+    // DOM refs
+    const fromEl = document.getElementById('from');
+    const toEl = document.getElementById('to');
+    const amountEl = document.getElementById('amount');
+    const cardsGrid = document.getElementById('cardsGrid');
+    const leftAmount = document.getElementById('left-amount');
+    const rightAmount = document.getElementById('right-amount');
+    const rateLine = document.getElementById('rate-line');
+    const compareBtn = document.getElementById('compareBtn');
+
+    // populate currency selects
+    function populateCurrencySelects() {
+      currencies.forEach(c=>{
+        const label = `${c.sym} ${c.code} — ${c.name}`;
+        const o = document.createElement('option'); o.value = c.code; o.textContent = label;
+        fromEl.appendChild(o);
+        toEl.appendChild(o.cloneNode(true));
+      });
+      fromEl.value = 'GBP';
+      toEl.value = 'EUR';
+    }
+
+    function format(n,d=2){ return Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}); }
+
+    // convert provider.defaultRate (GBP->EUR baseline) to from->to pair rate
+    function computeProviderRate(provider, from, to){
+      const marketFrom = marketGBP[from] ?? 1;
+      const marketTo   = marketGBP[to] ?? 1;
+      const marketEUR  = marketGBP['EUR'] ?? 1;
+      const multiplier = (marketTo / marketFrom) / marketEUR;
+      return provider.defaultRate * multiplier;
+    }
+
+    function computePairMarketRate(from,to){ const gFrom = marketGBP[from] ?? 1; const gTo = marketGBP[to] ?? 1; return gTo / gFrom; }
+
+    // star helper with color class selection
+    function starColorClass(rating){
+      if (rating >= 4.5) return 'green';
+      if (rating >= 4.0) return 'orange';
+      return 'red';
+    }
+
+    function renderStars(rating){
+      const full = Math.floor(rating);
+      const half = (rating - full) >= 0.5 ? 1 : 0;
+      const colorClass = starColorClass(rating);
+      let out = '';
+      for(let i=0;i<full;i++) out += '<span class="star">★</span>';
+      if(half) out += '<span class="star">★</span>';
+      const faded = 5 - (full + half);
+      for(let i=0;i<faded;i++) out += '<span class="star" style="color:#e6e6e6">★</span>';
+      return `<span class="stars ${colorClass}">${out}</span>`;
+    }
+
+    // render cards
+    function renderCards(){
+      cardsGrid.innerHTML = '';
+      const from = fromEl.value, to = toEl.value;
+      const amount = Number(String(amountEl.value).replace(/[^\d\.\-]/g,'')) || 0;
+
+      const rows = providers.map(p=>{
+        const rate = computeProviderRate(p, from, to);
+        const recipient = amount * rate;
+        return {...p, rate, recipient};
+      }).sort((a,b)=>b.recipient - a.recipient);
+
+      rows.forEach(p=>{
+        const logoSrc = `./logos/logos-${p.id}.svg`;
+        const card = document.createElement('article');
+        card.className = 'provider-card';
+        card.innerHTML = `
+          <div class="card-row-1">
+            <div class="provider-left">
+              <div class="logo" aria-hidden="true">
+                <img src="${logoSrc}" alt="${p.name} logo" onerror="this.onerror=null;this.src='./logos/logo-placeholder.svg';" />
+              </div>
+              <div class="name-and-visit">
+                <div class="prov-name" title="${p.name}">${p.name}</div>
+                <a class="visit-inline" href="${p.url}" data-url="${p.url}" target="_blank" rel="noopener noreferrer">Visit</a>
+              </div>
+            </div>
+
+            <div class="rating-cell">
+              ${renderStars(p.rating)}
+              <div style="font-weight:800;color:#0f1720;margin-left:6px">${p.rating.toFixed(1)}</div>
+            </div>
+          </div>
+
+          <div class="card-row-2">
+            <div class="value-box value-recipient">
+              <div class="label">Recipient Get</div>
+              <div class="value">${to==='EUR'?'€':''}${format(p.recipient,2)} ${to}</div>
+            </div>
+
+            <div class="value-box">
+              <div class="label">Current rate</div>
+              <div class="value">${p.rate.toFixed(6)}</div>
+            </div>
+
+            <div class="value-box">
+              <div class="label">Fees</div>
+              <div class="value">${p.fee}</div>
+            </div>
+          </div>
+        `;
+        cardsGrid.appendChild(card);
+      });
+
+      // update summary
+      leftAmount.textContent = (from==='GBP'?'£':'') + format(amount,2) + ' ' + from;
+      const marketRate = computePairMarketRate(from,to);
+      rightAmount.textContent = (to==='EUR'?'€':'') + format(amount * marketRate,6) + ' ' + to;
+      rateLine.textContent = `1 ${from} ≈ ${marketRate.toFixed(6)} ${to}`;
+    }
+
+    // delegated click handler for Visit links
+    document.addEventListener('click', function(e){
+      const btn = e.target.closest('a[data-url]');
+      if (!btn) return;
+      const url = btn.getAttribute('data-url') || btn.getAttribute('href');
+      if (!url) return;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    });
+
+    // init
+    populateCurrencySelects();
+    amountEl.value = '1000.00';
+    renderCards();
+    [fromEl,toEl,amountEl].forEach(el => el.addEventListener('input', renderCards));
+    compareBtn.addEventListener('click', renderCards);
+  </script>
+</body>
+</html>
